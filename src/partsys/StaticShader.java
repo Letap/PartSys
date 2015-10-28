@@ -12,5 +12,10 @@ public class StaticShader extends Shader {
 		super.bindAttribute(0, "position");
 		super.bindAttribute(1, "textureCoords");
 	}
+	@Override
+	protected void getAllUniformLocations() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

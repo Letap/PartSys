@@ -2,9 +2,8 @@ package partsys;
 
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -15,10 +14,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
 
-
-import de.matthiasmann.twl.utils.PNGDecoder;
-import de.matthiasmann.twl.utils.PNGDecoder.Format;
 import models.RawModel;
 
 public class ModelLoader {
@@ -27,39 +25,28 @@ public class ModelLoader {
 	private List<Integer> vboList = new ArrayList<Integer>();
 	private List<Integer> textureList = new ArrayList<Integer>();
 
-	public RawModel loadToVAO(float[] positions, int[] indices){
+	public RawModel loadToVAO(float[] positions, float[] textureCoordinates, int[] indices){
 		int vaoID = createVAO();
 		bindIndexBuffer(indices);
 		storeInAttributeList(0, 3, positions);
 
+		storeInAttributeList(1, 2, textureCoordinates);
 		unbindVAO();
 		return new RawModel(vaoID,indices.length);
 	}
 	
 	public int loadTexture(String fileName){
-		ByteBuffer buf = null;
+		Texture texture = null;
 		try {
-		    // Open the PNG file as an InputStream
-		    InputStream in = new FileInputStream(fileName);
-		    // Link the PNG decoder to this stream
-		    PNGDecoder decoder = new PNGDecoder(in);
-		     
-		    // Decode the PNG file in a ByteBuffer
-		    buf = ByteBuffer.allocateDirect(
-		            4 * decoder.getWidth() * decoder.getHeight());
-		    decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
-		    buf.flip();
-		     
-		    in.close();
+			texture = TextureLoader.getTexture("PNG", new FileInputStream(fileName));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
-		    e.printStackTrace();
-		    System.exit(-1);
+			e.printStackTrace();
 		}
 		
-		// Create a new texture object in memory and bind it
-        int texId = GL11.glGenTextures();
-       
-        return texId;
+		int textureID = texture.getTextureID();
+		return textureID;
 	}
 	
 	public void deleteAll(){
