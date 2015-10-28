@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Pri/Documents/GitHub/lwgl/jar/lwjgl.jar" sourcepath="C:/Users/Pri/Documents/GitHub/lwgl/src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/Pri/Documents/GitHub/lwgl/doc/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Pri/Documents/GitHub/lwgl/native"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Pri/Documents/GitHub/lwgl/doc/javadoc.zip"/>
+	<classpathentry kind="lib" path="C:/Users/Pri/Documents/GitHub/lwgl/src.zip"/>
+	<classpathentry kind="lib" path="C:/Users/Pri/Documents/GitHub/PNGDecoder/PNGDecoder.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
