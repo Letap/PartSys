@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
 import partsys.ModelRenderer;
+import partsys.Renderer;
 import partsys.StaticShader;
 
 public class ParticleManager {
@@ -22,9 +23,9 @@ public class ParticleManager {
         }
 	}
 	
-	public void updateParticles(ModelRenderer renderer, StaticShader shader){
+	public void updateParticles(Renderer renderer){
 		for (int i = 0; i < particles.size(); i++) {
-			renderer.render(particles.get(i),shader);
+			renderer.processEntity(particles.get(i));
 			(particles.get(i)).increaseRotation((float)Math.random(),(float)Math.random(), (float)Math.random());
 			(particles.get(i)).increasePosition(0, -0.002f, 0);
         }

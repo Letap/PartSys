@@ -16,9 +16,7 @@ public class MainLoop {
 	public static void main(String[] args) {
 		DisplayManager.createDisplay();
 				
-		ModelLoader loader = new ModelLoader();
-        StaticShader shader = new StaticShader();
-        ModelRenderer renderer = new ModelRenderer(shader);        
+		ModelLoader loader = new ModelLoader();    
         ModelTexture texture = new ModelTexture(loader.loadTexture("res/image.png"));
         
         texture.setShineDamper(10);
@@ -31,27 +29,22 @@ public class MainLoop {
         Camera camera = new Camera();
         
         RawModel particle = OBJLoader.loadOBJModel("res/part.obj", loader);
-        TexturedModel tPart = new TexturedModel(particle,texture);
         
         ParticleManager pmanager = new ParticleManager(new TexturedModel(particle,texture));
 
+        Renderer mainRenderer = new Renderer();
 		while(!Display.isCloseRequested()){
 		//	entity.increasePosition(0, 0, -0.002f);
 			entity.increaseRotation(0, 0.1f, 0);
 			camera.move();
-			renderer.prepare();
-        	shader.start();
-        	shader.loadLight(light);
-        	shader.loadViewMatrix(camera);
 
-            pmanager.updateParticles(renderer, shader);
-        	renderer.render(entity,shader);
+			mainRenderer.processEntity(entity);
+            pmanager.updateParticles(mainRenderer);
+			mainRenderer.render(light,camera);
         	
-        	shader.stop();
 			DisplayManager.updateDisplay();
 		}
     	loader.deleteAll();
-    	shader.cleanUp();
 		
 		DisplayManager.closeDisplay();
 
