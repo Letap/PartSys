@@ -33,7 +33,8 @@ public class ModelLoader {
 		storeInAttributeList(2, 3, normals);
 		unbindVAO();
 		return new RawModel(vaoID,indices.length);
-	}
+	}	
+	
 	
 	public int loadTexture(String fileName){
 		Texture texture = null;

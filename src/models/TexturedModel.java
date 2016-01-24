@@ -6,6 +6,10 @@ public class TexturedModel {
 	private RawModel rawModel;
 	private ModelTexture texture;
 	
+	public TexturedModel() {
+		super();
+	}
+	
 	public TexturedModel(RawModel rawModel, ModelTexture texture) {
 		super();
 		this.rawModel = rawModel;
