@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
@@ -43,16 +44,27 @@ public class PolyRenderer {
 		}
 		finishRendering();
 	}	
-	
+	/*
 	public void render(Entity poly, Camera camera){
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		prepare();
 		updateModelViewMatrix(poly.getPosition(), poly.getPolyRotation(), poly.getScale(), viewMatrix);
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 		finishRendering();
+	}*/
+	
+	public void render(Particle poly, Camera camera){
+		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
+		prepare();
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, poly.getTexture().getTextureID());
+		updateModelViewMatrix(poly.getPosition(), poly.getPolyRotation(), poly.getScale(), viewMatrix);
+		shader.loadTextureCoordInfo(poly.getTexOffset1(), poly.getTexOffset2(), poly.getTexture().getNumberOfRows(), poly.getBlend());
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+		finishRendering();
 	}
 	
-	
+	/*
 	public void renderVertices3d(Camera camera, Vector3f s, Vector3f f){
 		float[] verts = {			
 				s.getX(), s.getY(), s.getZ(),	
@@ -69,7 +81,7 @@ public class PolyRenderer {
 		//updateModelViewMatrix(s, 0, 1, viewMatrix);
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 		finishRendering();
-	}
+	}*/
 
 	//The code below is for the updateModelViewMatrix() method
 	//modelMatrix.m00 = viewMatrix.m00;
@@ -109,7 +121,7 @@ public class PolyRenderer {
 		GL30.glBindVertexArray(quad.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glDepthMask(false);
 
 	}
@@ -122,7 +134,7 @@ public class PolyRenderer {
 		shader.stop();
 		quad = loader.loadToVAO(VERTICES, 2);
 	}
-
+/*
 	public void render(LinkedList<Particle> particles, Camera camera) {
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		prepare();
@@ -133,6 +145,6 @@ public class PolyRenderer {
 		}
 		finishRendering();
 		
-	}
+	}*/
 
 }

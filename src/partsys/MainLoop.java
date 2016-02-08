@@ -22,6 +22,7 @@ import models.TexturedModel;
 import particles.Emitter;
 import particles.Particle;
 import particles.ParticleManager;
+import particles.ParticleTexture;
 import poly.PolyRenderer;
 
 public class MainLoop {
@@ -73,7 +74,9 @@ public class MainLoop {
         
 
         ParticleManager pmanager = new ParticleManager(polyRenderer,camera);
-        Emitter emitter = new Emitter( texparticle, 0, 0, 0, 0, 0, 0, pmanager);
+        
+        ModelTexture parttexture = new ModelTexture(loader.loadTexture("res/fire.png"));
+        Emitter emitter = new Emitter( texparticle, new ParticleTexture(parttexture.getID(),4), 0, 0, 0, 0, 0, 0, pmanager);
         emitter.start();
         
 		while(!Display.isCloseRequested()){
@@ -89,11 +92,11 @@ public class MainLoop {
 		//	mainRenderer.processEntity(line1);
 			mainRenderer.processFloor(floor);
 			mainRenderer.processFloor(floor2);
-            pmanager.updateParticles(mainRenderer);
+           // pmanager.updateParticles(mainRenderer);
 			mainRenderer.render(light,camera);
 
-           // pmanager.updateParticles(mainRenderer);
-			polyRenderer.render(polys, camera);
+            pmanager.updateParticles(mainRenderer);
+			polyRenderer.render(polys, camera);/*
 			for(int i=-20; i<=80;i+=20){
 				for(int j=20; j<=120;j+=20){
 
@@ -112,7 +115,7 @@ public class MainLoop {
 
 					polyRenderer.renderVertices3d(camera,new Vector3f(j,i,20),new Vector3f(j,i,120));
 				}
-			}
+			}*/
 			
 			//guiRenderer.render(guis);
 			DisplayManager.updateDisplay();

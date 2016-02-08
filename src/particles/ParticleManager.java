@@ -1,6 +1,10 @@
 package particles;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -10,7 +14,7 @@ import partsys.Renderer;
 import poly.PolyRenderer;
 
 public class ParticleManager {
-	private final LinkedList<Particle> particles = new LinkedList<Particle>();
+	private final Map<ParticleTexture, LinkedList<Particle>> particles = new HashMap<ParticleTexture, LinkedList<Particle>>();
 	private PolyRenderer polyRenderer;
 	private Camera camera;
 	public int minx = -20, maxx = 20, miny=0, maxy=20, minz=0, maxz=20;
@@ -21,20 +25,31 @@ public class ParticleManager {
 	}
 	
 	public void updateParticles(Renderer renderer){
-		for (int i = 0; i < particles.size(); i++) {
-			Particle pi = (particles.get(i));
-			pi.updatePosition();
-			if(isOutOfBounds(pi.getPosition())) particles.remove(pi);
-
-			//polyRenderer.render(pi, camera);
-			renderer.processEntity(pi);
-			pi.increaseRotation((float)Math.random(),(float)Math.random(), (float)Math.random());
-			//pi.increasePosition(0, -0.005f, 0);
-        }
+		Iterator<Entry<ParticleTexture, LinkedList<Particle>>> mapIterator = particles.entrySet().iterator();
+		while(mapIterator.hasNext()){
+			
+			LinkedList<Particle> list = mapIterator.next().getValue();
+			for (int i = 0; i < list.size(); i++) {
+				Particle pi = list.get(i);
+				pi.updatePosition();
+				if(isOutOfBounds(pi.getPosition())) list.remove(pi);
+				
+				if(list.isEmpty()) mapIterator.remove();
+				polyRenderer.render(pi, camera);
+				//renderer.processEntity(pi);
+				pi.increaseRotation((float)Math.random(),(float)Math.random(), (float)Math.random());
+				//pi.increasePosition(0, -0.005f, 0);
+	        }
+		}
 	}
 	
 	public void addParticle(Particle p){
-		particles.add(p);
+		LinkedList<Particle> list = particles.get(p.getTexture());
+		if(list == null) {
+			list = new LinkedList<Particle>();
+			particles.put(p.getTexture(), list);
+		}
+		list.add(p);
 	}
 	
 	private boolean isOutOfBounds(Vector3f position){

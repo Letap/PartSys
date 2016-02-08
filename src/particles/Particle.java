@@ -1,5 +1,6 @@
 package particles;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.Entity;
@@ -11,16 +12,20 @@ public class Particle extends Entity {
 	private RawModel model;
 	private Vector3f force, mass, acceleration, velocity;
 	private float maxSpeed = 0.01f, minSpeed = -maxSpeed;
-	private float life = 100;
+	private float life = 1000;
 	private float timePassed = 0;
 	
 	private ParticleTexture texture;
+	private Vector2f texOffset1 = new Vector2f();
+	private Vector2f texOffset2 = new Vector2f();
+	private float blend;
 	
 
-	public Particle(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+	public Particle(TexturedModel model, ParticleTexture texture, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model,position,rotX,rotY,rotZ,scale);
-		this.velocity = new Vector3f(0, -20f, 0);
-		this.acceleration = new Vector3f(0,-0.0005f,0);
+		this.velocity = new Vector3f(0, 0, 0);
+		this.acceleration = new Vector3f(0,0,0);
+		this.texture = texture;
 	}
 	
 	public void updatePosition(){
@@ -28,6 +33,8 @@ public class Particle extends Entity {
 		Vector3f.add(velocity, acceleration, velocity);
 		clampVelocity();
 		float d = DisplayManager.getDelta();
+		updateTextureInfo();
+		timePassed += DisplayManager.getDelta();
 		this.increasePosition(velocity.getX()*d, velocity.getY()*d, velocity.getZ()*d);
 	}
 	
@@ -41,6 +48,40 @@ public class Particle extends Entity {
 		velocity = new Vector3f(Math.min(maxSpeed, velocity.getX()),Math.min(maxSpeed, velocity.getY()),Math.min(maxSpeed, velocity.getZ()));
 		velocity = new Vector3f(Math.max(minSpeed, velocity.getX()),Math.max(minSpeed, velocity.getY()),Math.max(minSpeed, velocity.getZ()));
 	}
+
+	public ParticleTexture getTexture() {
+		return texture;
+	}
+
+	public Vector2f getTexOffset1() {
+		return texOffset1;
+	}
+
+	public Vector2f getTexOffset2() {
+		return texOffset2;
+	}
+
+	public float getBlend() {
+		return blend;
+	}
 	
 	
+	private void updateTextureInfo(){
+		float lifeFactor = timePassed/life;
+		int stageCount = texture.getNumberOfRows()*texture.getNumberOfRows();
+		float atlasProg = lifeFactor * stageCount;
+		int index1 =(int) Math.floor(atlasProg);
+		int index2 = index1 < stageCount - 1 ? index1+1:index1;
+		this.blend = atlasProg % 1;
+		
+		setTextureOffset(texOffset1, index1);
+		setTextureOffset(texOffset2, index2);
+	}
+	
+	private void setTextureOffset(Vector2f offset,int index){
+		int column = index % texture.getNumberOfRows();
+		int row = index/texture.getNumberOfRows();
+		offset.x = (float) column/texture.getNumberOfRows();
+		offset.y = (float) row/texture.getNumberOfRows();
+	}
 }
