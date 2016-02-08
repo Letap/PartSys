@@ -39,6 +39,7 @@ public class Renderer {
 	public void render(Light light, Camera camera){
 		prepare();
 		shader.start();
+		shader.loadSkyColour(0.69f, 1, 1);
 		shader.loadLight(light);
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
@@ -46,6 +47,7 @@ public class Renderer {
 		
 
 		floorShader.start();
+		floorShader.loadSkyColour(0.69f, 1, 1);
 		floorShader.loadLight(light);
 		floorShader.loadViewMatrix(camera);
 		floorRenderer.render(floors);
@@ -97,4 +99,14 @@ public class Renderer {
 		projectionMatrix.m33 = 0;
 		
 	}
+
+	public Matrix4f getProjectionMatrix() {
+		return projectionMatrix;
+	}
+
+	public void setProjectionMatrix(Matrix4f projectionMatrix) {
+		this.projectionMatrix = projectionMatrix;
+	}
+	
+	
 }

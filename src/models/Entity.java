@@ -6,6 +6,7 @@ public class Entity {
 	private TexturedModel model;
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
+	private float polyRotation=0;
 	private float scale;
 	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super();
@@ -64,6 +65,12 @@ public class Entity {
 	}
 	public void setScale(float scale) {
 		this.scale = scale;
+	}
+	public float getPolyRotation() {
+		return polyRotation;
+	}
+	public void setPolyRotation(float polyRotation) {
+		this.polyRotation = polyRotation;
 	}
 	
 	
