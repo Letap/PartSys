@@ -10,12 +10,12 @@ import partsys.DisplayManager;
 
 public class Particle extends Entity {
 	private RawModel model;
-	private Vector3f force, mass, acceleration, velocity;
+	public Vector3f force, mass, acceleration, velocity;
 	private float maxSpeed = 0.01f, minSpeed = -maxSpeed;
-	private float life = 1000;
-	private float timePassed = 0;
+	public float life = 1000;
+	public float timePassed = 0;
 	
-	private ParticleTexture texture;
+	public ParticleTexture texture;
 	private Vector2f texOffset1 = new Vector2f();
 	private Vector2f texOffset2 = new Vector2f();
 	private float blend;
@@ -84,4 +84,22 @@ public class Particle extends Entity {
 		offset.x = (float) column/texture.getNumberOfRows();
 		offset.y = (float) row/texture.getNumberOfRows();
 	}
+
+	public Vector3f getAcceleration() {
+		return acceleration;
+	}
+
+	public void setAcceleration(Vector3f acceleration) {
+		this.acceleration = acceleration;
+	}
+
+	public Vector3f getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(Vector3f velocity) {
+		this.velocity = velocity;
+	}
+	
+	
 }

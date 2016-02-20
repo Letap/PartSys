@@ -23,6 +23,7 @@ import particles.Emitter;
 import particles.Particle;
 import particles.ParticleManager;
 import particles.ParticleTexture;
+import particles.SmokeEmitter;
 import poly.PolyRenderer;
 
 public class MainLoop {
@@ -75,9 +76,10 @@ public class MainLoop {
 
         ParticleManager pmanager = new ParticleManager(polyRenderer,camera);
         
-        ModelTexture parttexture = new ModelTexture(loader.loadTexture("res/fire.png"));
-        Emitter emitter = new Emitter( texparticle, new ParticleTexture(parttexture.getID(),4), 0, 0, 0, 0, 0, 0, pmanager);
+        ModelTexture parttexture = new ModelTexture(loader.loadTexture("res/smoke3.png"));
+        Emitter emitter = new Emitter( texparticle, new ParticleTexture(parttexture.getID(),8), 0, 0, 0, 0, 0, 0, pmanager);
         emitter.start();
+       // emitter.startCheck();
         
 		while(!Display.isCloseRequested()){
 		//	entity.increasePosition(0, 0, -0.002f);
