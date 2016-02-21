@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
@@ -67,9 +68,13 @@ public class MainLoop {
         
         //Create and start particle emitter
         ModelTexture parttexture = new ModelTexture(loader.loadTexture("res/smoke3.png"));
-        Emitter emitter = new Emitter( texparticle, new ParticleTexture(parttexture.getID(),8), 0, 0, 0, 0, 0, 0, pmanager);
+        ParticleTexture smoketext = new ParticleTexture(parttexture.getID(),8);
+        //SmokeEmitter emitter = new SmokeEmitter( texparticle, smoketext, 0,0,30, pmanager);
+        Emitter emitter = new Emitter( texparticle, new ParticleTexture(particletexture.getID(),1), 0,0,0,0,0,0, pmanager);
         emitter.start();
-        //emitter.startCheck(); //performs tests
+        emitter.startCheck(); //performs tests
+        
+        boolean mouseDown = false;
         
 		while(!Display.isCloseRequested()){
 			camera.move();
@@ -83,6 +88,20 @@ public class MainLoop {
             pmanager.updateParticles(mainRenderer);
 			
 			polyRenderer.render(polys, camera);
+			
+			if(Mouse.isButtonDown(0)){
+				mouseDown = true;
+			}
+			else{
+				if(mouseDown){
+					/*Vector3f pos = camera.getCentre();
+					SmokeEmitter emitter2 = new SmokeEmitter( texparticle, smoketext,pos.getX(),pos.getY(),pos.getZ(), pmanager);
+			        emitter2.start();*/
+				}
+				mouseDown = false;
+				
+			}
+			
 			if(Keyboard.isKeyDown(Keyboard.KEY_B)){
 				
 				for(int i=-20; i<=80;i+=20){

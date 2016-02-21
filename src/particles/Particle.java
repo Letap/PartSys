@@ -19,6 +19,7 @@ public class Particle extends Entity {
 	private Vector2f texOffset1 = new Vector2f();
 	private Vector2f texOffset2 = new Vector2f();
 	private float blend;
+	private int i,j,k;
 	
 
 	public Particle(TexturedModel model, ParticleTexture texture, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
@@ -44,8 +45,8 @@ public class Particle extends Entity {
 	}
 	
 	private void clampVelocity(){
-		velocity = new Vector3f(Math.min(maxSpeed, velocity.getX()),Math.min(maxSpeed, velocity.getY()),Math.min(maxSpeed, velocity.getZ()));
-		velocity = new Vector3f(Math.max(minSpeed, velocity.getX()),Math.max(minSpeed, velocity.getY()),Math.max(minSpeed, velocity.getZ()));
+		velocity.set(Math.min(maxSpeed, velocity.getX()),Math.min(maxSpeed, velocity.getY()),Math.min(maxSpeed, velocity.getZ()));
+		velocity.set(Math.max(minSpeed, velocity.getX()),Math.max(minSpeed, velocity.getY()),Math.max(minSpeed, velocity.getZ()));
 	}
 
 	public ParticleTexture getTexture() {
@@ -98,6 +99,30 @@ public class Particle extends Entity {
 
 	public void setVelocity(Vector3f velocity) {
 		this.velocity = velocity;
+	}
+
+	public int getI() {
+		return i;
+	}
+
+	public void setI(int i) {
+		this.i = i;
+	}
+
+	public int getJ() {
+		return j;
+	}
+
+	public void setJ(int j) {
+		this.j = j;
+	}
+
+	public int getK() {
+		return k;
+	}
+
+	public void setK(int k) {
+		this.k = k;
 	}
 	
 	

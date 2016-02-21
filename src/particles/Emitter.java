@@ -29,7 +29,7 @@ public class Emitter {
 	}
 
 	public void start(){
-		for(int i=0;i<20;i++){
+		for(int i=0;i<400;i++){
         	float x = (float) (nums.nextFloat()*(20)-10 );
         	float y = (float) (nums.nextFloat()*20);
         	float z =  (float) (nums.nextFloat()*(20)+20 );
@@ -68,17 +68,19 @@ public class Emitter {
 				  System.out.println("----Starting 3d array test----");
 				  LinkedList<Particle> parts = pman.boxes.nearbyParticles(randomP);
 				  System.out.println("Done Check");
+				  int size = 0;
 				  for (int l = 0; l< parts.size(); l++) {
 						Particle pi = parts.get(l);
 						if(pi!= randomP){
 						Vector3f pos = pi.getPosition();
 						System.out.format("%f, %f, %f", pos.getX(), pos.getY(), pos.getZ() );
 
+						size++;
 						System.out.println();
 						}
 			      }
 
-				  System.out.println(parts.size());
+				  System.out.println(size);
 				  System.out.println("Done with test");
 			  }
 			}, 1000);

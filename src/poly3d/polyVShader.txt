@@ -9,7 +9,6 @@ out float blend;
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
 uniform float is3d;
-
 uniform vec2 texOffset1;
 uniform vec2 texOffset2;
 uniform vec2 texCoordInfo;

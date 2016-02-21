@@ -57,13 +57,13 @@ public class PolyRenderer {
 	
 	public void render(Particle poly, Camera camera){
 		viewMatrix = Maths.createViewMatrix(camera);
-		prepare();
+		//prepare();
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, poly.getTexture().getTextureID());
 		updateModelViewMatrix(poly.getPosition(), poly.getPolyRotation(), poly.getScale(), viewMatrix);
 		shader.loadTextureCoordInfo(poly.getTexOffset1(), poly.getTexOffset2(), poly.getTexture().getNumberOfRows(), poly.getBlend());
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
-		finishRendering();
+		//finishRendering();
 	}
 	
 	
@@ -117,7 +117,7 @@ public class PolyRenderer {
 		shader.loadModelViewMatrix(x);
 	}
 	
-	private void prepare(){
+	public void prepare(){
 		shader.start();
 		GL30.glBindVertexArray(quad.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
@@ -127,7 +127,7 @@ public class PolyRenderer {
 
 	}
 	
-	private void finishRendering(){
+	public void finishRendering(){
 		GL11.glDepthMask(true);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL20.glDisableVertexAttribArray(0);

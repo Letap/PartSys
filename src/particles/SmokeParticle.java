@@ -17,6 +17,11 @@ public class SmokeParticle extends Particle {
 		int rem = l % 16;
 		this.life = l-rem;
 	}
+	public boolean isOutOfBounds(){
+		if(this.getPosition().y <-0.01) return true;
+		if(this.life < this.timePassed) return true;
+		return false;
+	}
 	
 	
 
