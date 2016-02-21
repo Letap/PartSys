@@ -12,7 +12,7 @@ public class Particle extends Entity {
 	private RawModel model;
 	public Vector3f force, mass, acceleration, velocity;
 	private float maxSpeed = 0.01f, minSpeed = -maxSpeed;
-	public float life = 1000;
+	public float life = 3000;
 	public float timePassed = 0;
 	
 	public ParticleTexture texture;
@@ -28,11 +28,10 @@ public class Particle extends Entity {
 		this.texture = texture;
 	}
 	
-	public void updatePosition(){
+	public void updatePosition(float d){
 		
 		Vector3f.add(velocity, acceleration, velocity);
 		clampVelocity();
-		float d = DisplayManager.getDelta();
 		updateTextureInfo();
 		timePassed += DisplayManager.getDelta();
 		this.increasePosition(velocity.getX()*d, velocity.getY()*d, velocity.getZ()*d);

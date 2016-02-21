@@ -17,22 +17,26 @@ public class Camera {
 
 	public void move(){
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-			centre.z += 0.5f;
+			centre.x += 0.5f * Math.sin(Math.toRadians(yaw));
+			centre.z -= 0.5f * Math.cos(Math.toRadians(yaw));
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-			centre.z -= 0.5f;
+			centre.x -= 0.5f * Math.sin(Math.toRadians(yaw));
+			centre.z += 0.5f * Math.cos(Math.toRadians(yaw));
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-			centre.x += 0.5f;
+			centre.z -= 0.5f * Math.sin(Math.toRadians(yaw));
+			centre.x -= 0.5f * Math.cos(Math.toRadians(yaw));
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-			centre.x -= 0.5f;
+			centre.z += 0.5f * Math.sin(Math.toRadians(yaw));
+			centre.x += 0.5f * Math.cos(Math.toRadians(yaw));
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
-			centre.y -= 0.5f;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_X)){
+		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
 			centre.y += 0.5f;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+			centre.y -= 0.5f;
 		}
 		computeTheta();
 		computePitch();
@@ -60,13 +64,13 @@ public class Camera {
 	}
 	
 	private void computeZoom(){
-		float zoom = Mouse.getDWheel()*0.1f;
+		float zoom = Mouse.getDWheel() * 0.1f;
 		distance -= zoom;
 	}
 	
 	private void computePitch(){
 		if(Mouse.isButtonDown(1)){
-			float dp = Mouse.getDY()* 0.3f;
+			float dp = Mouse.getDY() * 0.3f;
 			pitch -= dp;
 		}
 	}
@@ -88,12 +92,9 @@ public class Camera {
 		position.y = centre.y + ydiff;
 		position.x = centre.x - (float) (hdiff * Math.sin(Math.toRadians(theta)));
 		position.z = centre.z - (float) (hdiff * Math.cos(Math.toRadians(theta)));
-		
 	}
 
 	public Vector3f getCentre() {
 		return centre;
 	}
-	
-	
 }

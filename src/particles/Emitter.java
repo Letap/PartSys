@@ -29,7 +29,7 @@ public class Emitter {
 	}
 
 	public void start(){
-		for(int i=0;i<500;i++){
+		for(int i=0;i<20;i++){
         	float x = (float) (nums.nextFloat()*(20)-10 );
         	float y = (float) (nums.nextFloat()*20);
         	float z =  (float) (nums.nextFloat()*(20)+20 );

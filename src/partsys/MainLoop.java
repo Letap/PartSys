@@ -29,97 +29,80 @@ import poly.PolyRenderer;
 public class MainLoop {
 
 	public static void main(String[] args) {
-		DisplayManager.createDisplay();
-		Vector3f s = new Vector3f(-10,0,0);
-		Vector3f f = new Vector3f(-10,20,0);
+		DisplayManager.createDisplay();		
+		//Create lighting
+		Light light = new Light(new Vector3f(25,0,-25), new Vector3f(1,1,1));
+        
+		//Create camera
+		Camera camera = new Camera();   
 		
-		ModelLoader loader = new ModelLoader();    
+		//Create model loader
+		ModelLoader loader = new ModelLoader(); 
+		
+		//Create renderers
+		Renderer mainRenderer = new Renderer();
+		PolyRenderer polyRenderer = new PolyRenderer(loader,mainRenderer.getProjectionMatrix());
+		GuiRenderer guiRenderer = new GuiRenderer(loader);
+		
+        //Models
         ModelTexture texture = new ModelTexture(loader.loadTexture("res/image3.png"));
-        
-        texture.setShineDamper(10);
-        texture.setReflectivity(1);
-        
-        
         RawModel model = OBJLoader.loadOBJModel("res/dragon.obj", loader);
         TexturedModel texturedModel = new TexturedModel(model,texture);
-        
-
-        TexturedModel textcube =(new Line(s,f,texture,loader)).model;
-        
         Entity entity = new Entity(texturedModel, new Vector3f(0,0,25),0,0,0,1);
-        Entity line1 = new Entity(textcube, new Vector3f(0,0,25),0,0,0,1);
-        
-        Light light = new Light(new Vector3f(25,0,-25), new Vector3f(1,1,1));
-        Camera camera = new Camera();
-        
-
-        Floor floor = new Floor(0,0,loader, new ModelTexture(loader.loadTexture("res/grass.png")));
-        Floor floor2 = new Floor(-1,0,loader, new ModelTexture(loader.loadTexture("res/grass.png")));
-        
         RawModel particle = OBJLoader.loadOBJModel("res/part.obj", loader);
-        
         ModelTexture particletexture = new ModelTexture(loader.loadTexture("res/image2.png"));
         TexturedModel texparticle = new TexturedModel(particle,particletexture);
-        
-        
-        Renderer mainRenderer = new Renderer();
-        
-        PolyRenderer polyRenderer = new PolyRenderer(loader,mainRenderer.getProjectionMatrix());
         List<Entity> polys = new ArrayList<Entity>(); 
-        polys.add(line1);
-        
         List<GuiTexture> guis = new ArrayList<GuiTexture>();
         GuiTexture gui = new GuiTexture(loader.loadTexture("res/grass.png"),new Vector2f(0.5f,0.5f),new Vector2f(0.25f,0.25f));
         guis.add(gui);
-        GuiRenderer guiRenderer = new GuiRenderer(loader);
         
-
+        
+        //Load floor
+        Floor floor = new Floor(0,0,loader, new ModelTexture(loader.loadTexture("res/grass.png")));
+        Floor floor2 = new Floor(-1,0,loader, new ModelTexture(loader.loadTexture("res/grass.png")));
+        
+        //Create particle manager        
         ParticleManager pmanager = new ParticleManager(polyRenderer,camera);
         
+        //Create and start particle emitter
         ModelTexture parttexture = new ModelTexture(loader.loadTexture("res/smoke3.png"));
         Emitter emitter = new Emitter( texparticle, new ParticleTexture(parttexture.getID(),8), 0, 0, 0, 0, 0, 0, pmanager);
         emitter.start();
-       // emitter.startCheck();
+        //emitter.startCheck(); //performs tests
         
 		while(!Display.isCloseRequested()){
-		//	entity.increasePosition(0, 0, -0.002f);
-			entity.increaseRotation(0, 0.01f, 0);
 			camera.move();
 			
-			if(Keyboard.isKeyDown(Keyboard.KEY_B)){
-				polys.add(new Entity(textcube,new Vector3f( camera.getCentre()),0,0,0,1));
-			}
 
 		//	mainRenderer.processEntity(entity);
-		//	mainRenderer.processEntity(line1);
 			mainRenderer.processFloor(floor);
 			mainRenderer.processFloor(floor2);
-           // pmanager.updateParticles(mainRenderer);
 			mainRenderer.render(light,camera);
 
             pmanager.updateParticles(mainRenderer);
-			polyRenderer.render(polys, camera);/*
-			for(int i=-20; i<=80;i+=20){
-				for(int j=20; j<=120;j+=20){
-
-					polyRenderer.renderVertices3d(camera,new Vector3f(i,0,j),new Vector3f(i,20,j));
-				}
-			}
-			for(int i=0; i<=20;i+=10){
-				for(int j=20; j<=120;j+=20){
-
-					polyRenderer.renderVertices3d(camera,new Vector3f(-20,i,j),new Vector3f(80,i,j));
-				}
-			}
 			
-			for(int i=0; i<=20;i+=10){
-				for(int j=-20; j<=80;j+=20){
-
-					polyRenderer.renderVertices3d(camera,new Vector3f(j,i,20),new Vector3f(j,i,120));
+			polyRenderer.render(polys, camera);
+			if(Keyboard.isKeyDown(Keyboard.KEY_B)){
+				
+				for(int i=-20; i<=80;i+=20){
+					for(int j=20; j<=120;j+=20){
+						polyRenderer.renderVertices3d(camera,new Vector3f(i,0,j),new Vector3f(i,20,j));
+					}
+				}/*
+				for(int i=0; i<=20;i+=10){
+					for(int j=20; j<=120;j+=20){	
+						polyRenderer.renderVertices3d(camera,new Vector3f(-20,i,j),new Vector3f(80,i,j));
+					}
 				}
-			}*/
-			
-			//guiRenderer.render(guis);
+				
+				for(int i=0; i<=20;i+=10){
+					for(int j=-20; j<=80;j+=20){	
+						polyRenderer.renderVertices3d(camera,new Vector3f(j,i,20),new Vector3f(j,i,120));
+					}
+				}*/
+			}
+			//guiRenderer.render(guis);bbb
 			DisplayManager.updateDisplay();
 		}
         polyRenderer.cleanUp();

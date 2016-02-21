@@ -1,4 +1,4 @@
-package poly;
+package poly3d;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,8 +24,6 @@ public class PolyRenderer {
 	private RawModel quad;
 	private PolyShader shader;
 	private ModelLoader loader;
-	private Matrix4f viewMatrix;
-	private Matrix4f modelMatrix;
 	
 	public PolyRenderer(ModelLoader loader, Matrix4f projectionMatrix){
 		this.loader = loader;
@@ -37,7 +35,7 @@ public class PolyRenderer {
 	}
 	
 	public void render(List<Entity> polys, Camera camera){
-		viewMatrix = Maths.createViewMatrix(camera);
+		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		prepare();
 		for (Entity poly:polys){
 			updateModelViewMatrix(poly.getPosition(), poly.getPolyRotation(), poly.getScale(), viewMatrix);
@@ -56,7 +54,7 @@ public class PolyRenderer {
 	}*/
 	
 	public void render(Particle poly, Camera camera){
-		viewMatrix = Maths.createViewMatrix(camera);
+		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		prepare();
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, poly.getTexture().getTextureID());
@@ -75,7 +73,7 @@ public class PolyRenderer {
 				f.getX()+0.1f, f.getY()+0.1f, f.getZ()+0.1f,	
 				
 		};
-		viewMatrix = Maths.createViewMatrix(camera);
+		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		quad = loader.loadToVAO(verts, 3);
 		prepare();
 		shader.loadModelViewMatrix(viewMatrix);
@@ -100,7 +98,7 @@ public class PolyRenderer {
 	}
 	
 	private void updateModelViewMatrix(Vector3f position, float rotation, float scale, Matrix4f viewMatrix){
-		modelMatrix = new Matrix4f();
+		Matrix4f modelMatrix = new Matrix4f();
 		Matrix4f.translate(position, modelMatrix, modelMatrix);
 		modelMatrix.m00 = viewMatrix.m00;
 		modelMatrix.m01 = viewMatrix.m10;

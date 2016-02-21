@@ -3,8 +3,8 @@ package partsys;
 public class ModelTexture {
 	private int textureID;
 	
-	private float shineDamper = 1;
-	private float reflectivity = 0;
+	private float shineDamper = 10;
+	private float reflectivity = 1;
 	
 	private boolean useFakeLighting = false;
 	
@@ -20,8 +20,6 @@ public class ModelTexture {
 		return shineDamper;
 	}
 	
-	
-
 	public boolean isUseFakeLighting() {
 		return useFakeLighting;
 	}

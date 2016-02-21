@@ -4,7 +4,7 @@ import partsys.ModelLoader;
 import partsys.ModelTexture;
 
 public class Floor {
-	private static final float SIZE = 800;
+	private static final float SIZE = 100;
 	private static final int VERTEX_COUNT = 128;
 	
 	private float x;
