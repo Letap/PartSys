@@ -34,9 +34,9 @@ public class BoxContainer {
 	@SuppressWarnings("unchecked")
 	public void addPoint(Particle p){
 		Vector3f i = getIndex(p.getPosition());
-			data[(int)i.getX()][(int)i.getY()][(int)i.getZ()].add(p);
+		data[(int)i.getX()][(int)i.getY()][(int)i.getZ()].add(p);
 	}
-	
+	/*
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void updateParticles(){
 		
@@ -58,7 +58,7 @@ public class BoxContainer {
 			}
 		}
 	}
-	
+	*/
 	public Vector3f getIndex(Vector3f position){
 		if(position.x < bottom.x || position.y < bottom.y || position.z < bottom.z){
 			//System.out.println("ERROR, BoxContainer: Can't find index, position out of bounds" );
@@ -73,8 +73,8 @@ public class BoxContainer {
 		
 		return index;
 	}
-	
-	private boolean wrongIndex(Particle p, int i, int j, int k){
+	/*
+	public boolean wrongIndex(Particle p, int i, int j, int k){
 		Vector3f actual = getIndex(p.getPosition());
 		if(actual.x<0.5f){
 			return true;
@@ -85,8 +85,9 @@ public class BoxContainer {
 		
 		
 		return false;
-	}
+	}*/
 	
+	/*
 	private boolean isOutOfBounds(Vector3f pi){
 		//if(position.x<=minx) return true;
 		//if(position.x>=maxx) return true;
@@ -96,7 +97,7 @@ public class BoxContainer {
 		//if(position.z>=maxz) return true;
 		
 		return false;
-	}
+	}*/
 	
 	@SuppressWarnings("unchecked")
 	public LinkedList<Particle> nearbyParticles(Particle p){
@@ -106,7 +107,7 @@ public class BoxContainer {
 		int i = (int) index.getX();
 		int j = (int) index.getY();
 		int k = (int) index.getZ();
-		System.out.format("%d, %d, %d", i, j,k );  System.out.println();
+		//System.out.format("%d, %d, %d", i, j,k );  System.out.println();
 		LinkedList<Particle> pijk = (LinkedList<Particle>) data[i][j][k];
 		for (int l = 0; l< pijk.size(); l++) {
 			Particle pi = pijk.get(l);
@@ -115,53 +116,68 @@ public class BoxContainer {
 		
 		if(i>0){
 
-			System.out.format("%d, %d, %d", i-1, j,k );  System.out.println();
+			//System.out.format("%d, %d, %d", i-1, j,k );  System.out.println();
 			LinkedList<Particle> p2 = (LinkedList<Particle>) data[i-1][j][k];
-			for (int l = 0; l< pijk.size(); l++) {
-				Particle pi = pijk.get(l);
+			for (int l = 0; l< p2.size(); l++) {
+				Particle pi = p2.get(l);
 				ret.add(pi);
 	        }
 		}
 		if(i<sections){
 
-			System.out.format("%d, %d, %d", i+1, j,k );  System.out.println();
+			//System.out.format("%d, %d, %d", i+1, j,k );  System.out.println();
 			LinkedList<Particle> p2 = (LinkedList<Particle>) data[i+1][j][k];
-			for (int l = 0; l< pijk.size(); l++) {
-				Particle pi = pijk.get(l);
+			for (int l = 0; l< p2.size(); l++) {
+				Particle pi = p2.get(l);
 				ret.add(pi);
 	        }
 		}
 
 		if(j>0){
 			LinkedList<Particle> p2 = (LinkedList<Particle>) data[i][j-1][k];
-			for (int l = 0; l< pijk.size(); l++) {
-				Particle pi = pijk.get(l);
+			for (int l = 0; l< p2.size(); l++) {
+				Particle pi = p2.get(l);
 				ret.add(pi);
 	        }
 		}
 		if(j<sections){
 			LinkedList<Particle> p2 = (LinkedList<Particle>) data[i][j+1][k];
-			for (int l = 0; l< pijk.size(); l++) {
-				Particle pi = pijk.get(l);
+			for (int l = 0; l< p2.size(); l++) {
+				Particle pi = p2.get(l);
 				ret.add(pi);
 	        }
 		}
 
 		if(k>0){
 			LinkedList<Particle> p2 = (LinkedList<Particle>) data[i][j][k-1];
-			for (int l = 0; l< pijk.size(); l++) {
-				Particle pi = pijk.get(l);
+			for (int l = 0; l< p2.size(); l++) {
+				Particle pi = p2.get(l);
 				ret.add(pi);
 	        }
 		}
 		if(k<sections){
 			LinkedList<Particle> p2 = (LinkedList<Particle>) data[i][j][k+1];
-			for (int l = 0; l< pijk.size(); l++) {
-				Particle pi = pijk.get(l);
+			for (int l = 0; l< p2.size(); l++) {
+				Particle pi = p2.get(l);
 				ret.add(pi);
 	        }
 		}
 		
+		
+		
+		/*
+		for(int i1 = 0;i1<sections+1;i1++){
+			for(int j1 = 0;j1<sections+1;j1++){
+				for(int k1 = 0;k1<sections+1;k1++){
+					LinkedList<Particle> pijk1 = (LinkedList<Particle>) data[i1][j1][k1];
+					for (int l = 0; l< pijk1.size(); l++) {
+						Particle pi = pijk1.get(l);
+						Vector3f pos = pi.getPosition();
+						System.out.format("(%f, %f, %f) at (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ(), i1, j1,k1 );  System.out.println();
+			        }
+				}
+			}
+		}*/
 		
 		
 		return ret;

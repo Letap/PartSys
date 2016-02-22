@@ -21,6 +21,7 @@ import models.Line;
 import models.RawModel;
 import models.TexturedModel;
 import particles.Emitter;
+import particles.FireworkEmitter;
 import particles.Particle;
 import particles.ParticleManager;
 import particles.ParticleTexture;
@@ -46,17 +47,30 @@ public class MainLoop {
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
         //Models
-        ModelTexture texture = new ModelTexture(loader.loadTexture("res/image3.png"));
-        RawModel model = OBJLoader.loadOBJModel("res/dragon.obj", loader);
-        TexturedModel texturedModel = new TexturedModel(model,texture);
-        Entity entity = new Entity(texturedModel, new Vector3f(0,0,25),0,0,0,1);
+        ModelTexture treetexture = new ModelTexture(loader.loadTexture("res/green.png"));
+        RawModel tree = OBJLoader.loadOBJModel("res/tree.obj", loader);
+        TexturedModel texttree = new TexturedModel(tree,treetexture);
+        Entity entity = new Entity(texttree, new Vector3f(0,0,25),0,0,0,5);
+        Entity[] trees = new Entity[50];
+        for(int i=0;i<trees.length;i++){
+        	trees[i] = new Entity(texttree, new Vector3f((int)(200*Math.random()-100),0,(int)(100*Math.random())),0,0,0,(float)(4+2*Math.random()));
+        }
+        ModelTexture ftexture = new ModelTexture(loader.loadTexture("res/yellow.png"));
+        ParticleTexture fireworktext = new ParticleTexture(ftexture.getID(),2);
+        
+        
+        //Particles
         RawModel particle = OBJLoader.loadOBJModel("res/part.obj", loader);
-        ModelTexture particletexture = new ModelTexture(loader.loadTexture("res/image2.png"));
+        ModelTexture particletexture = new ModelTexture(loader.loadTexture("res/snowflake.png"));
         TexturedModel texparticle = new TexturedModel(particle,particletexture);
         List<Entity> polys = new ArrayList<Entity>(); 
+        
+        //GUI
         List<GuiTexture> guis = new ArrayList<GuiTexture>();
         GuiTexture gui = new GuiTexture(loader.loadTexture("res/grass.png"),new Vector2f(0.5f,0.5f),new Vector2f(0.25f,0.25f));
         guis.add(gui);
+        
+        
         
         
         //Load floor
@@ -70,17 +84,31 @@ public class MainLoop {
         ModelTexture parttexture = new ModelTexture(loader.loadTexture("res/smoke3.png"));
         ParticleTexture smoketext = new ParticleTexture(parttexture.getID(),8);
         //SmokeEmitter emitter = new SmokeEmitter( texparticle, smoketext, 0,0,30, pmanager);
-        Emitter emitter = new Emitter( texparticle, new ParticleTexture(particletexture.getID(),1), 0,0,0,0,0,0, pmanager);
+        Emitter emitter = new Emitter( texparticle, new ParticleTexture(particletexture.getID(),2), 0,0,0,0,0,0, pmanager);
         emitter.start();
-        emitter.startCheck(); //performs tests
+        
+        /*//Performs tests
+        emitter.startCheck();
+        emitter.start();
+        emitter.startCheck();
+        for(int i = 0; i<6; i++){
+	        emitter.total = emitter.total*2;
+	        emitter.start();
+	        emitter.startCheck();
+        }*/
+        
+        
         
         boolean mouseDown = false;
+        boolean fDown = false;
         
 		while(!Display.isCloseRequested()){
 			camera.move();
 			
-
-		//	mainRenderer.processEntity(entity);
+			for(int i=0;i<trees.length;i++){
+				mainRenderer.processEntity(trees[i]);
+	        }
+			
 			mainRenderer.processFloor(floor);
 			mainRenderer.processFloor(floor2);
 			mainRenderer.render(light,camera);
@@ -94,21 +122,33 @@ public class MainLoop {
 			}
 			else{
 				if(mouseDown){
-					/*Vector3f pos = camera.getCentre();
+					Vector3f pos = camera.getCentre();
 					SmokeEmitter emitter2 = new SmokeEmitter( texparticle, smoketext,pos.getX(),pos.getY(),pos.getZ(), pmanager);
-			        emitter2.start();*/
+			        emitter2.start();
 				}
 				mouseDown = false;
 				
 			}
 			
+			if(Keyboard.isKeyDown(Keyboard.KEY_F)){
+				fDown = true;
+			}
+			else{
+				if(fDown){
+					fDown = false;
+					Vector3f pos = camera.getCentre();
+					new FireworkEmitter(texparticle, fireworktext,pos.getX(),pos.getY(),pos.getZ(), pmanager);
+					
+				}
+			}
+			
+			/*
 			if(Keyboard.isKeyDown(Keyboard.KEY_B)){
-				
 				for(int i=-20; i<=80;i+=20){
 					for(int j=20; j<=120;j+=20){
 						polyRenderer.renderVertices3d(camera,new Vector3f(i,0,j),new Vector3f(i,20,j));
 					}
-				}/*
+				}
 				for(int i=0; i<=20;i+=10){
 					for(int j=20; j<=120;j+=20){	
 						polyRenderer.renderVertices3d(camera,new Vector3f(-20,i,j),new Vector3f(80,i,j));
@@ -119,8 +159,8 @@ public class MainLoop {
 					for(int j=-20; j<=80;j+=20){	
 						polyRenderer.renderVertices3d(camera,new Vector3f(j,i,20),new Vector3f(j,i,120));
 					}
-				}*/
-			}
+				}
+			}*/
 			//guiRenderer.render(guis);bbb
 			DisplayManager.updateDisplay();
 		}

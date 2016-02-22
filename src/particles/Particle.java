@@ -16,8 +16,8 @@ public class Particle extends Entity {
 	public float timePassed = 0;
 	
 	public ParticleTexture texture;
-	private Vector2f texOffset1 = new Vector2f();
-	private Vector2f texOffset2 = new Vector2f();
+	public Vector2f texOffset1 = new Vector2f();
+	public Vector2f texOffset2 = new Vector2f();
 	private float blend;
 	private int i,j,k;
 	
@@ -25,8 +25,9 @@ public class Particle extends Entity {
 	public Particle(TexturedModel model, ParticleTexture texture, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model,position,rotX,rotY,rotZ,scale);
 		this.velocity = new Vector3f(0, 0, 0);
-		this.acceleration = new Vector3f(0,0,0);
+		this.acceleration = new Vector3f(0,(float)(-0.0005f-0.005f*Math.random()),0);
 		this.texture = texture;
+		updateTextureInfo();
 	}
 	
 	public void updatePosition(float d){
@@ -39,7 +40,7 @@ public class Particle extends Entity {
 	}
 	
 	public boolean isOutOfBounds(){
-		if(this.getPosition().y <-0.01) return true;
+		//if(this.getPosition().y <-0.01) return true;
 		
 		return false;
 	}
@@ -66,7 +67,7 @@ public class Particle extends Entity {
 	}
 	
 	
-	private void updateTextureInfo(){
+	public void updateTextureInfo(){
 		float lifeFactor = timePassed/life;
 		int stageCount = texture.getNumberOfRows()*texture.getNumberOfRows();
 		float atlasProg = lifeFactor * stageCount;
@@ -78,7 +79,7 @@ public class Particle extends Entity {
 		setTextureOffset(texOffset2, index2);
 	}
 	
-	private void setTextureOffset(Vector2f offset,int index){
+	protected void setTextureOffset(Vector2f offset,int index){
 		int column = index % texture.getNumberOfRows();
 		int row = index/texture.getNumberOfRows();
 		offset.x = (float) column/texture.getNumberOfRows();

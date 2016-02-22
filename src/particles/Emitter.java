@@ -19,8 +19,9 @@ public class Emitter {
 	
 	private Particle randomP;
 	private int partGend = 0;
+	public int total = 100;
 	
-	private Random nums = new Random(1432);
+	private Random nums = new Random(843732381);
 	
 	public Emitter( TexturedModel model, ParticleTexture texture, int minx, int maxx, int miny, int maxy, int minz, int maxz, ParticleManager pman ){
 		this.model = model;
@@ -28,62 +29,61 @@ public class Emitter {
 		this.texture = texture;
 	}
 
-	public void start(){
-		for(int i=0;i<400;i++){
+	public void start(){/*
+		for(int i=0;i<total;i++){
         	float x = (float) (nums.nextFloat()*(20)-10 );
-        	float y = (float) (nums.nextFloat()*20);
+        	float y = 20;//(float) (nums.nextFloat()*20);
         	float z =  (float) (nums.nextFloat()*(20)+20 );
         	randomP = new Particle(model, texture, new Vector3f(x,y,z),0,0,0,1f);
         	pman.addParticle(randomP);
 			
-		}
+		}*/
 		
-		/*
+		
 		timer.scheduleAtFixedRate(new TimerTask() {
 			  @Override
 			  public void run() {
-		        	float x = (float) (Math.random()*(20)-10 );
+		        	float x = (float) (Math.random()*(200)-100 );
 		        	float y = 20;
-		        	float z =  (float) (Math.random()*(20)+20 );
-		        	Particle p = new Particle(model, texture, new Vector3f(x,y,z),0,0,0,1f);
+		        	float z =  (float) (Math.random()*(200)+0 );
+		        	Particle p = new MultiTextureParticle(model, texture, new Vector3f(x,y,z),0,0,0,0.15f);
+		        	p.setPolyRotation((float)(360*Math.random()));
 		        	pman.addParticle(p);
 		        	if(partGend==3) {
 		        		randomP = p;
 		        	}
 		        	partGend++;
-		        	if(randomP != null) System.out.println(randomP.getPosition().getY());
+		        	//if(randomP != null) System.out.println(randomP.getPosition().getY());
 			  }
-			}, 50, 100);*/
+			}, 50, 1);
 	}
 	
 	
 	public void startCheck(){
-		timer.schedule(new TimerTask() {
-			  @Override
-			  public void run() {
-				  System.out.println("----Starting linkedlist test----");
+		//timer.schedule(new TimerTask() {
+			//  @Override
+			//  public void run() {
+				  //System.out.println("----Starting linkedlist test----");
 				  //LinkedList<Particle> parts = pman.findWithinDistance(randomP, 5f);
 
-				  System.out.println("----Finished linkedlist test----");
-				  System.out.println("----Starting 3d array test----");
+				  //System.out.println("----Finished linkedlist test----");
+				  //System.out.println("----Starting 3d array test----");
 				  LinkedList<Particle> parts = pman.boxes.nearbyParticles(randomP);
-				  System.out.println("Done Check");
+				  //System.out.println("----Finished 3d array test, printing results----");
 				  int size = 0;
 				  for (int l = 0; l< parts.size(); l++) {
 						Particle pi = parts.get(l);
 						if(pi!= randomP){
 						Vector3f pos = pi.getPosition();
-						System.out.format("%f, %f, %f", pos.getX(), pos.getY(), pos.getZ() );
-
+						//System.out.format("Particle at (%f, %f, %f)", pos.getX(), pos.getY(), pos.getZ() ); System.out.println();
 						size++;
-						System.out.println();
 						}
 			      }
 
 				  System.out.println(size);
-				  System.out.println("Done with test");
-			  }
-			}, 1000);
+				  //System.out.println("----Done----");
+			//  }
+			//}, 1000);
 	}
 	
 	public void end(){

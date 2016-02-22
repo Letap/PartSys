@@ -22,7 +22,7 @@ public class ParticleManager {
 	LinkedList<Particle> list;
 	public int minx = -20, maxx = 20, miny=0, maxy=20, minz=0, maxz=20;
 	
-	public BoxContainer boxes = new BoxContainer(new Vector3f(-10,0,20), new Vector3f(10,20,40),2);
+	public BoxContainer boxes = new BoxContainer(new Vector3f(-10,0,20), new Vector3f(10,20,40),5);
 	
 	public ParticleManager(PolyRenderer polyRenderer, Camera camera){
         this.polyRenderer = polyRenderer;
@@ -38,8 +38,14 @@ public class ParticleManager {
 			for (int i = 0; i < list.size(); i++) {
 				Particle pi = list.get(i);
 				pi.updatePosition(delta);
-				
-				if(isOutOfBounds(pi.getPosition())) list.remove(pi);
+				/*
+				//Handle boxes update
+				Vector3f index = boxes.getIndex(pi.getPosition());
+				pi.setI((int)index.getX());
+				pi.setJ((int)index.getY());
+				pi.setK((int)index.getZ());
+				*/
+				if(isOutOfBounds(pi.getPosition())||pi.isOutOfBounds()) list.remove(pi);
 				
 				if(list.isEmpty()) mapIterator.remove();
 				polyRenderer.render(pi, camera);
@@ -49,7 +55,7 @@ public class ParticleManager {
 	        }
 		}
 		polyRenderer.finishRendering();
-		boxes.updateParticles();
+		//boxes.updateParticles();
 	}
 	
 	public void addParticle(Particle p){
@@ -59,7 +65,7 @@ public class ParticleManager {
 			particles.put(p.getTexture(), list);
 		}
 		list.add(p);
-		boxes.addPoint(p);
+		//boxes.addPoint(p);
 	}
 	
 	private boolean isOutOfBounds(Vector3f position){
